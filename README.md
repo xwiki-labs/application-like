@@ -10,4 +10,4 @@ In order to build you'll need [maven](http://maven.apache.org). Make sure you ha
 
 ## Integrate the like button in wiki pages
 
-In order to integrate the like button in a wiki page you just need to insert `{{LikeButton/}}` macro in the page content.
+In order to integrate the like button in a wiki page you just need to insert `{{likeButton/}}` macro in the page content.

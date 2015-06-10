@@ -322,10 +322,10 @@ $(function() {
       <description>Display a like button in a wiki page to make a rating on usefulness of the page for the current user.</description>
     </property>
     <property>
-      <id>LikeButton</id>
+      <id>likeButton</id>
     </property>
     <property>
-      <name>LikeButton macro</name>
+      <name>likeButton macro</name>
     </property>
     <property>
       <supportsInlineMode>1</supportsInlineMode>
@@ -417,7 +417,7 @@ $(function() {
          #set($filterCond = " and doc.fullName like :filterValue")
       #end
       #set($xwql = "where doc.content like :macroName and doc.fullName &lt;&gt; 'PageRatingsCode.PageRatingsMacro' $!filterCond order by doc.title") 
-      #set($query = $services.query.xwql($xwql).bindValue("macroName","%{{LikeButton/}}%"))
+      #set($query = $services.query.xwql($xwql).bindValue("macroName","%{{likeButton/}}%"))
       #if($isFiltred)
          #set($query = $query.bindValue("filterValue","%$filterValue%"))   
       #end
