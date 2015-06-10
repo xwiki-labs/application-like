@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+-->
+
+<xwikidoc>
+  <web>PageRatingsCode</web>
+  <name>PageRatingsMacro</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <parent>PageRatingsCode.WebHome</parent>
+  <creator>xwiki:XWiki.Admin</creator>
+  <author>xwiki:XWiki.Admin</author>
+  <customClass/>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <creationDate>1433495157000</creationDate>
+  <date>1433948296000</date>
+  <contentUpdateDate>1433948296000</contentUpdateDate>
+  <version>1.1</version>
+  <title>Page Ratings Macro</title>
+  <defaultTemplate/>
+  <validationScript/>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <object>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <disabled>0</disabled>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <name>PageRatingsCode.PageRatingsMacro</name>
+    <number>0</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>02a456c3-6f10-4283-87f4-fabe0ce4f407</guid>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>// Globals
+var pageRatingsActionURL = "$xwiki.getURL('PageRatingsCode.PageRatingsMacro','view','xpage=plain&amp;outputSyntax=plain')";
+require(['jquery','xwiki-meta'],function($, xm){
+$.extend({'pageRatings' : {
+// Initialize PageRatings
+initialize: function() {
+$('#likeBtn').click(function() {
+   // If the user like the page the rating value = 1 otherwise the rating value = 0
+   var ratingVal = 0;
+   if(!$(this).hasClass('active')){
+      ratingVal = 1;
+   }
+   $(this).toggleClass('active');
+   $.pageRatings.saveRatingEvent(ratingVal);
+});
+$.pageRatings.checkPageRating();
+},
+saveRatingEvent: function(ratingVal) {
+  var docRef = (xm) ? xm.document : $('meta[name="document"]').attr('content');
+  $.ajax({
+    url: pageRatingsActionURL + '&amp;action=saveRatingEvent&amp;ratingVal=' + ratingVal + '&amp;docRef=' + docRef,
+    dataType: 'json'
+  });
+},
+
+// Check if the current user already make the rating
+checkPageRating: function(){
+  var docRef = (xm) ? xm.document : $('meta[name="document"]').attr('content');
+  $.ajax({
+    url: pageRatingsActionURL + '&amp;action=checkPageRating&amp;docRef=' + docRef,
+    dataType: 'json',
+    success: function(rep) {
+       if(rep &amp;&amp; rep.ratingDone){
+          if(rep.ratingVal == "1"){
+             $('#likeBtn').addClass('active');
+          }
+       }
+    }
+  }); 
+}
+}
+});
+
+$(function() {
+   $.pageRatings.initialize();
+});
+});</code>
+    </property>
+    <property>
+      <name>Page Ratings js</name>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>onDemand</use>
+    </property>
+  </object>
+  <object>
+    <class>
+      <name>XWiki.WikiMacroClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <code>
+        <disabled>0</disabled>
+        <name>code</name>
+        <number>9</number>
+        <prettyName>Macro code</prettyName>
+        <rows>20</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <contentDescription>
+        <disabled>0</disabled>
+        <name>contentDescription</name>
+        <number>8</number>
+        <prettyName>Content description (Not applicable for "No content" type)</prettyName>
+        <rows>5</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </contentDescription>
+      <contentType>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>contentType</name>
+        <number>7</number>
+        <prettyName>Macro content type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator>|</separator>
+        <separators>|</separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>Optional|Mandatory|No content</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentType>
+      <defaultCategory>
+        <disabled>0</disabled>
+        <name>defaultCategory</name>
+        <number>4</number>
+        <prettyName>Default category</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </defaultCategory>
+      <description>
+        <disabled>0</disabled>
+        <name>description</name>
+        <number>3</number>
+        <prettyName>Macro description</prettyName>
+        <rows>5</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </description>
+      <id>
+        <disabled>0</disabled>
+        <name>id</name>
+        <number>1</number>
+        <prettyName>Macro id</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </id>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>2</number>
+        <prettyName>Macro name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <supportsInlineMode>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>supportsInlineMode</name>
+        <number>5</number>
+        <prettyName>Supports inline mode</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </supportsInlineMode>
+      <visibility>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>visibility</name>
+        <number>6</number>
+        <prettyName>Macro visibility</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator>|</separator>
+        <separators>|</separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>Current User|Current Wiki|Global</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </visibility>
+    </class>
+    <name>PageRatingsCode.PageRatingsMacro</name>
+    <number>0</number>
+    <className>XWiki.WikiMacroClass</className>
+    <guid>ef5b45a3-2b39-49ff-95ab-ff92dbc17c0d</guid>
+    <property>
+      <code>{{velocity}}
+## Globals
+#set($discard = $xwiki.jsx.use("PageRatingsCode.PageRatingsMacro"))
+
+{{html}}
+&lt;div class="row"&gt;
+&lt;div class="col-md-1 col-md-offset-5"&gt;
+   &lt;a href="javascript:;" class="btn btn-info pageRatingBtn" id="likeBtn" title="Like this page"&gt;
+      &lt;span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"&gt;&lt;/span&gt; Like
+   &lt;/a&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+{{/html}}
+{{/velocity}}</code>
+    </property>
+    <property>
+      <contentDescription/>
+    </property>
+    <property>
+      <contentType>No content</contentType>
+    </property>
+    <property>
+      <defaultCategory/>
+    </property>
+    <property>
+      <description>The PageRatings macro inserts a button in a wiki page. 
+This button allows the user to say if the current page is useful or no.</description>
+    </property>
+    <property>
+      <id>PageRatings</id>
+    </property>
+    <property>
+      <name>PageRatings macro</name>
+    </property>
+    <property>
+      <supportsInlineMode>1</supportsInlineMode>
+    </property>
+    <property>
+      <visibility>Global</visibility>
+    </property>
+  </object>
+  <content>{{velocity}}
+#**
+*   This script is used to receive the  ajax requests from the PageRatings macro
+*#
+## Globals
+#set($action = $request.action)
+#set($docRef = $request.docRef)
+#set($ratingVal = $request.ratingVal)
+#set($pageRatingsDataSpace = 'PageRatings')
+#set($ip = $request.getRemoteAddr())
+#set($user = $context.user)
+#set($date = $datetool.getDate())
+#if("$!action" != '' &amp;&amp; ($action == 'saveRatingEvent' || $action == 'checkPageRating' || $action == 'getRatedPages' || $action == 'pageRatingsCSVExport' || $action == 'clearRatingData'))
+   ## Save the rating
+   #if($action == 'saveRatingEvent' &amp;&amp; "$!ratingVal" != '' &amp;&amp; "$!docRef" != '' &amp;&amp; $xwiki.exists($docRef))
+      ## Check if the current user was already make the rating
+      ## 1) If yes : change the value of its rating
+      ## 2) If no : create a new document + object to save his ratingis
+      ## If the user is a Guest use his IP adresse to identify it otherwise use his username
+      #set($isNewRating = true)
+      #if($isGuest)
+         #set($condition = "rating.user='$user' and rating.docRef='$docRef' and rating.ip='$ip'")
+      #else
+         #set($condition = "rating.user='$user' and rating.docRef='$docRef'")
+      #end
+      #set($xwql = "from doc.object(PageRatingsCode.PageRatingsClass) as rating where $condition")   
+      #set($results = $services.query.xwql($xwql).setLimit(1).execute())
+      #if($results.size() &gt; 0) 
+         ## The user already made the rating
+         #set($isNewRating = false)
+         #set($ratingDocRef = $results.get(0))
+         #set($ratingDoc = $xwiki.getDocument($ratingDocRef))
+         #set($ratingObj = $ratingDoc.getObject("PageRatingsCode.PageRatingsClass"))
+      #else
+         ## New user
+         ## Create a new rating document with a PageRatingsClass object
+         #set($name = "rating${user}${docRef}")
+         #set($ratingDocRef = "${pageRatingsDataSpace}.${xwiki.getUniquePageName($pageRatingsDataSpace,$name)}")
+         #set($ratingDoc = $xwiki.getDocument($ratingDocRef))
+         #set($ratingObj = $ratingDoc.newObject("PageRatingsCode.PageRatingsClass"))   
+      #end
+      #if($isNewRating)
+         #set($discard = $ratingObj.set('docRef',$docRef))
+         #set($discard = $ratingObj.set('user',$user))
+         #set($discard = $ratingObj.set('date',$date))
+         #set($discard = $ratingObj.set('ip',$ip))
+      #end
+      #set($discard = $ratingObj.set('val',$ratingVal))
+      #set($discard = $ratingDoc.saveWithProgrammingRights())
+      {"ratingDocRef" : $ratingDoc.getDocumentReference(), "isNewRating" : $isNewRating}
+   #elseif($action == 'checkPageRating' &amp;&amp; "$!docRef" != '' &amp;&amp; $xwiki.exists($docRef))
+      ## check if the current user make the rating
+      #set($ratingDone = false)
+      #if($isGuest)
+         #set($condition = "rating.user='$user' and rating.docRef='$docRef' and rating.ip='$ip'")
+      #else
+         #set($condition = "rating.user='$user' and rating.docRef='$docRef'")
+      #end
+      #set($xwql = "from doc.object(PageRatingsCode.PageRatingsClass) as rating where $condition")   
+      #set($results = $services.query.xwql($xwql).setLimit(1).execute())
+      #if($results.size() &gt; 0)
+           #set($ratingDone = true)
+           #set($ratingDocRef = $results.get(0))
+           #set($ratingDoc = $xwiki.getDocument("$ratingDocRef"))
+           #set($ratingObj = $ratingDoc.getObject("PageRatingsCode.PageRatingsClass"))
+           #set($rval = $ratingObj.val)
+      #end
+      {"ratingDone" : $ratingDone, "ratingVal" : "$!rval"}
+    #elseif($action == 'getRatedPages')
+      ## Get rated pages
+      #set($offset = $util.parseInt($request.get('offset')))
+      #set($offset = $offset - 1)
+      #if($offset &lt; 0)
+        #set($offset = 0)
+      #end
+      #set($limit = $util.parseInt($request.get('limit')))
+      #set($filterValue = "$!{request.get('page')}")
+      #set($isFiltred = false)
+      #if("$!filterValue" != '')
+         #set($isFiltred = true) 
+         #set($filterCond = " and doc.fullName like :filterValue")
+      #end
+      #set($xwql = "where doc.content like :macroName and doc.fullName &lt;&gt; 'PageRatingsCode.PageRatingsMacro' $!filterCond order by doc.title") 
+      #set($query = $services.query.xwql($xwql).bindValue("macroName","%{{PageRatings/}}%"))
+      #if($isFiltred)
+         #set($query = $query.bindValue("filterValue","%$filterValue%"))   
+      #end
+      #set($totalRows = $query.count())  
+      #set($results = $query.setLimit($limit).setOffset($offset).execute())
+      #set($returnedRows = $results.size())
+      ## ===
+      ## JSON
+      ## ===
+      #set($rows = [])
+      #foreach($page in $results)
+         #set($csvExportURL = $xwiki.getURL("PageRatingsCode.PageRatingsMacro","view","action=pageRatingsCSVExport&amp;docRef=${page}&amp;xpage=plain&amp;outputSyntax=plain"))
+         #set($clearRatingDataURL = $xwiki.getURL("PageRatingsCode.PageRatingsMacro","view","action=clearRatingData&amp;docRef=${page}&amp;xpage=plain&amp;outputSyntax=plain"))
+         #set($htmlLink = "&lt;a href='$csvExportURL'&gt;Export CSV&lt;/a&gt;")
+         #if($hasAdmin)
+            #set($htmlLink = "${htmlLink} | &lt;a href='javascript:;' rel='$clearRatingDataURL' class='clearRatingData'&gt;Clear rating data&lt;/a&gt;")
+         #end
+         #set($row = {"doc_viewable" : true,"page" : $page, "actions" : $htmlLink})
+         #set($discard = $rows.add($row))
+      #end
+      {
+      "totalrows": $totalRows,
+      "matchingtags": {},
+      "tags" : [],
+      "returnedrows": $returnedRows,
+      "offset": ($offset + 1),
+      "reqNo": $util.parseInt($request.reqNo),
+      "rows": $jsontool.serialize($rows)
+      }      
+    #elseif($action == 'pageRatingsCSVExport')
+       #if("$!docRef" != '' &amp;&amp; $xwiki.exists($docRef))
+          ## Export data for a specific page
+          #set($exportAll = false)
+          #set($xwql = "from doc.object(PageRatingsCode.PageRatingsClass) as rating where rating.docRef='$docRef' order by rating.val desc, rating.date desc")
+          #set($pageDoc = $xwiki.getDocument($docRef))
+          #set($csvFileName = "${pageDoc.space}.${pageDoc.name}-pageRatings.csv")
+       #else
+          ## Export for all pages
+          #set($exportAll = true)
+          #set($xwql = "from doc.object(PageRatingsCode.PageRatingsClass) as rating where doc.fullName &lt;&gt; 'PageRatingsCode.PageRatingsTemplate' and rating.docRef &lt;&gt; '' order by rating.docRef, rating.val desc, rating.date desc")
+          #set($csvFileName = "allPagesRatings.csv")
+       #end
+       #set($results = $services.query.xwql($xwql).execute())
+       #set($discard = $response.setContentType("text/csv"))
+       #set($discard = $response.setHeader("Content-disposition", "attachment; filename=$csvFileName"))
+       Page;User;Rating;Date
+       #foreach($rating in $results)
+          #set($ratingDoc = $xwiki.getDocument($rating))
+          #set($ratingObj = $ratingDoc.getObject('PageRatingsCode.PageRatingsClass'))
+          #set($ratingVal = "Like")
+          #if($!ratingObj.val == "0")
+             #set($ratingVal = "Unlike")
+          #end
+          ## Insert an empty line before each rated page
+          #if($ratedDoc != $ratingObj.docRef)
+             #if("$!ratedDoc" != '')
+                "";"";"";""
+             #end
+             #set($ratedDoc = $ratingObj.docRef)
+          #end
+          "$!ratingObj.docRef";"$!ratingObj.user";"$!ratingVal";"$!ratingObj.date"          
+       #end
+    #elseif($action == "clearRatingData" &amp;&amp; "$!docRef" != '' &amp;&amp; $xwiki.exists($docRef))
+       ## Remove all ratings documents related to a page
+       #if($hasAdmin)
+          #set($xwql = "from doc.object(PageRatingsCode.PageRatingsClass) as rating where rating.docRef='$docRef' order by rating.val desc, rating.date desc")
+          #set($results = $services.query.xwql($xwql).execute())
+          #foreach($page in $results)
+             #if("$!page" != '' &amp;&amp; $xwiki.exists($page))
+                #set($discard = $xwiki.getDocument($page).delete())
+             #end
+          #end
+       #end
+    #end
+#end
+{{/velocity}}</content>
+</xwikidoc>
