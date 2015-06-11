@@ -227,7 +227,7 @@ $( "body" ).on( "click", "a.clearRatingData", function() {
     <property>
       <parameters>label=Like
 target=PageRatings.WebHome
-icon=like.png</parameters>
+icon=PageRatingsCode.WebHome@like.png</parameters>
     </property>
     <property>
       <scope>wiki</scope>
