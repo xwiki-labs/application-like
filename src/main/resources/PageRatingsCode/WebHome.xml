@@ -146,6 +146,93 @@ $( "body" ).on( "click", "a.clearRatingData", function() {
       <use>onDemand</use>
     </property>
   </object>
+  <object>
+    <name>PageRatingsCode.WebHome</name>
+    <number>0</number>
+    <className>XWiki.UIExtensionClass</className>
+    <guid>39381293-7db2-4da1-b79b-93890749083a</guid>
+    <class>
+      <name>XWiki.UIExtensionClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <name>content</name>
+        <number>3</number>
+        <prettyName>Extension Content</prettyName>
+        <rows>10</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <extensionPointId>
+        <disabled>0</disabled>
+        <name>extensionPointId</name>
+        <number>1</number>
+        <prettyName>Extension Point ID</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </extensionPointId>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>2</number>
+        <prettyName>Extension ID</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parameters>
+        <disabled>0</disabled>
+        <name>parameters</name>
+        <number>4</number>
+        <prettyName>Extension Parameters</prettyName>
+        <rows>10</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </parameters>
+      <scope>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>scope</name>
+        <number>5</number>
+        <prettyName>Extension Scope</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators> ,|</separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>wiki=Current Wiki|user=Current User|global=Global</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </scope>
+    </class>
+    <property>
+      <content/>
+    </property>
+    <property>
+      <extensionPointId>org.xwiki.platform.panels.Applications</extensionPointId>
+    </property>
+    <property>
+      <name>platform.panels.LikeApplication</name>
+    </property>
+    <property>
+      <parameters>label=Like
+target=PageRatings.WebHome
+icon=like.png</parameters>
+    </property>
+    <property>
+      <scope>wiki</scope>
+    </property>
+  </object>
   <content>{{velocity}}
 #**
 * This page is used to list all rated pages with the PageRatings application 
@@ -169,4 +256,13 @@ $( "body" ).on( "click", "a.clearRatingData", function() {
 {{/html}}
 #livetable("userdirectory" $columns $columnsProperties $options)
 {{/velocity}}</content>
+  <attachment>
+    <filename>like.png</filename>
+    <author>xwiki:XWiki.Admin</author>
+    <date>1434028059000</date>
+    <version>1.1</version>
+    <comment/>
+    <content>iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAnRSTlMA+bLyh4AAAAACYktHRAD/h4/MvwAAAAlvRkZzAAABegAAALwAnpRyaQAAAAd0SU1FB98GCw0DBSRiQuQAAAAJdnBBZwAAAogAAAHQAPBUlb0AAAKJSURBVFjD7ZfNaxNRFMXnf3pJabG0xJgQirFCS1sV6qKJKHah+LFQKKhYQURpI9pNSv3IQpEigpAiaguFgtKC1i+MSNRKTdtoLJMmd2fefTPzJpmZdOYO3XlWcy73/MIJL3mJAj6l7DhgfTTCGAufXyECfsSZUDhHAqg9TNf+TQpggklNEADFDhNgT8U74DYPBtKZNBLeeQaUQjx3AqCAgOeeAeKFF3VA1itgk58AlgAy4B7G5sgANcZTA0AGPMDUUzJgCw9xd4UMmMbQQ6ACSvt4JqqaADOeACOYmRRmyftJfIKRzj/C3eWm3ctnIdeOgGnNnuUmCe4B6gDmT+m+i7txD4DLmI+ta3YF7Uv3gBkMBOZ1n0W/5gDYmMtyLfw1Zt86MXDVGFzjdne2Uc/ec8CrkPaFE89r6+VB9H2qARhkDjr4GZR+w53T1q+ja/0g39JWJwALf1WChukX67MBdFOy5iJz1mFFPvfi9u8omqNVCZhqAmAWQAafQ+aL6LQnwBnrB69YsFfaFpDkj0fAjTK2gETdGf4P2Eb3fQLUPp+AFPMHeNPiDyAKsGEyQBSIrlEBb0WBWSACtAKXgAoQBbpLVIAoEKz9+KEBtAIpoAJEgQNlKkAUaPsEREBZ3AR3gAq4idvJajPA0AJXsUmBju/QDCC0d8m5wGNwAhyXA9aSrloAooDsqMh77xAOxplZx1Yb8stYIFKQgKSxfAUHv2J1hMh8XV4r8EJOlFyPtprYEJPVsaiZEBzbshS4YJooUM1/5PppGpa+1AYXdURXrxQWiJfqAI561MZsFXwN7gCwHLcFpMAtAIonbfLDFfeA2t2xqzE/ooIXAORvjJp1y3I4d/7P93b6B+Qi1CTIBBTEAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE1LTA2LTExVDE0OjUyOjA1KzAyOjAwVcfpfQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNS0wNi0xMVQxNDo1MjowNSswMjowMCSaUcEAAAAZdEVYdFNvZnR3YXJlAGdub21lLXNjcmVlbnNob3TvA78+AAAAAElFTkSuQmCC</content>
+    <filesize>990</filesize>
+  </attachment>
 </xwikidoc>
