@@ -1,4 +1,7 @@
 # application-like
+
+[![XWiki labs logo](https://labs.xwiki.com/xwiki/bin/download/Developments/Xlabs/xwiki-labs-project.png "XWiki labs")](https://labs.xwiki.com/xwiki/bin/view/Main/WebHome)
+
 Display a like button in a wiki page to make a rating on usefulness of the page for the current user.
 
 ## Building and installing from source
